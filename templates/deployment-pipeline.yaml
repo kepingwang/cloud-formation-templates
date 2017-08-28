@@ -17,6 +17,9 @@ Parameters:
   Cluster:
     Type: String
 
+  TaskRole:
+    Type: String
+
   TemplateBucket:
     Type: String
 
@@ -239,6 +242,7 @@ Resources:
                     "Tag" : { "Fn::GetParam" : [ "BuildOutput", "build.json", "tag" ] },
                     "DesiredCount": "1",
                     "Cluster": "${Cluster}",
+                    "TaskRole": "${TaskRole}",
                     "TargetGroup": "${TargetGroup}",
                     "Repository": "${Repository}"
                   }

@@ -7,11 +7,12 @@ Description: >
 Parameters:
   GitHubUser:
     Type: String
+    Default: kepingwang
     Description: Your username on GitHub.
 
   GitHubRepo:
     Type: String
-    Default: ecs-demo-php-simple-app
+    Default: pandora-app
     Description: The repo name of the sample service.
 
   GitHubBranch:
@@ -23,6 +24,15 @@ Parameters:
     Type: String
     Description: >
       Token for the user specified above. (https://github.com/settings/tokens)
+
+  TaskRole:
+    Type: String
+    Description: Task Role for the ECS instance to make API requests
+
+  KeyName:
+    Type: String
+    Default: cmd-aws-key
+    Description: SSH key pair name for the ec2 instance of autoscaling group
 
 
 Metadata:
@@ -55,6 +65,7 @@ Resources:
         SourceSecurityGroup: !GetAtt LoadBalancer.Outputs.SecurityGroup
         Subnets: !GetAtt VPC.Outputs.Subnets
         VpcId: !GetAtt VPC.Outputs.VpcId
+        KeyName: !Ref KeyName
 
   DeploymentPipeline:
     Type: AWS::CloudFormation::Stack
@@ -66,6 +77,7 @@ Resources:
         GitHubToken: !Ref GitHubToken
         GitHubRepo: !Ref GitHubRepo
         GitHubBranch: !Ref GitHubBranch
+        TaskRole: !Ref TaskRole
         TargetGroup: !GetAtt LoadBalancer.Outputs.TargetGroup
         TemplateBucket: cloud-formation-templates.kepingwang
 

@@ -16,6 +16,9 @@ Parameters:
   Repository:
     Type: String
 
+  TaskRole:
+    Type: String
+
 
 Resources:
   ECSServiceRole:
@@ -49,6 +52,7 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: !Sub ${AWS::StackName}-main-app
+      TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
         - Name: main-app
           Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repository}:${Tag}

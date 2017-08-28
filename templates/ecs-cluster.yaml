@@ -16,6 +16,8 @@ Parameters:
   VpcId:
     Type: AWS::EC2::VPC::Id
 
+  KeyName:
+    Type: String
 
 Mappings:
   AWSRegionToAMI:
@@ -73,6 +75,10 @@ Resources:
       SecurityGroupIngress:
         - SourceSecurityGroupId: !Ref SourceSecurityGroup
           IpProtocol: -1
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
       VpcId: !Ref VpcId
 
   Cluster:
@@ -135,6 +141,7 @@ Resources:
                   - /etc/cfn/hooks.d/cfn-auto-reloader.conf
     Properties:
       ImageId: !FindInMap [ AWSRegionToAMI, !Ref "AWS::Region", AMI ]
+      KeyName: !Ref KeyName
       InstanceType: !Ref InstanceType
       IamInstanceProfile: !Ref InstanceProfile
       SecurityGroups:
